@@ -1,0 +1,20 @@
+# Base files for any project
+Dockerfile*
+.dockerignore
+.git*
+
+# Nodejs-specific files
+**/node_modules
+**/test
+
+# Typical OS files
+**/.DS_Store
+
+# Swift-specific files
+**/.build/
+**/.swiftpm/
+**/Packages
+**/xcuserdata
+**/*.xcodeproj
+**/DerivedData/
+**/.swiftpm

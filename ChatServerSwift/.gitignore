@@ -1,0 +1,9 @@
+.DS_Store
+/.build
+/Packages
+/*.xcodeproj
+xcuserdata/
+DerivedData/
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+# This will leave a file because of working dir, but that would be an absolute path which should not be shared
+.swiftpm/xcode/xcshareddata

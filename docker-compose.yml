@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  chat-server-swift:
+    build:
+      context: .
+      dockerfile: Dockerfile-ChatServerSwift
+    environment:
+      PORT: 80
+    ports:
+      - 8031:80
