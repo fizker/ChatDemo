@@ -2,6 +2,12 @@ import Fluent
 import Foundation
 import Vapor
 
+extension UserModel {
+	var asDTO: UserDTO {
+		get throws { UserDTO(id: try requireID(), name: name, username: username) }
+	}
+}
+
 class UserController {
 	enum ValidationError: Error {
 		case usernameRequired, usernameInUse
@@ -34,6 +40,6 @@ class UserController {
 
 		try await user.save(on: req.db)
 
-		return .init(id: try user.requireID(), name: user.name, username: user.username)
+		return try user.asDTO
 	}
 }
