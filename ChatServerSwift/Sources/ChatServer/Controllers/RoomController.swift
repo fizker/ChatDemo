@@ -18,7 +18,7 @@ extension RoomModel {
 			id: try requireID(),
 			name: name,
 			participants: try await $participants.get(on: db).map { try $0.asDTO },
-			latestMessage: try await $messages.query(on: db).sort(\.$createdAt).first()?.asDTO(on: db)
+			latestMessage: try await $messages.query(on: db).sort(\.$createdAt, .descending).first()?.asDTO(on: db)
 		)
 	}
 }
