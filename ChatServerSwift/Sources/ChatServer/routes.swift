@@ -23,8 +23,11 @@ func routes(_ app: Application) throws {
 
 	let app = app.grouped(UserAuthenticator())
 
-	app.get { req -> String in
-		"Hello World"
+	app.get { req -> Response in
+		req.fileio.streamFile(at: "../ChatClientWeb/index.html")
+	}
+	app.get("styles.css") { req -> Response in
+		req.fileio.streamFile(at: "../ChatClientWeb/styles.css")
 	}
 
 	app.grouped(UserModel.guardMiddleware()).group("rooms") { app in

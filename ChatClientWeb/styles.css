@@ -1,0 +1,42 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+#root {
+	display: grid;
+	grid-template-areas:
+		"rooms messages"
+		"participants messages"
+		"participants message-field";
+	grid-template-columns: max-content 1fr;
+	grid-template-rows: 1fr 1fr max-content;
+
+	height: 100vh;
+}
+
+#rooms {
+	grid-area: rooms;
+	background: green;
+}
+
+#rooms__btn {}
+#rooms__list {}
+
+#participants {
+	grid-area: participants;
+	background: red;
+}
+
+#participants__btn {}
+
+#participants__list {}
+
+#messages {
+	grid-area: messages;
+	background: orange;
+}
+
+#message-field {
+	grid-area: message-field;
+	background: pink;
+}
