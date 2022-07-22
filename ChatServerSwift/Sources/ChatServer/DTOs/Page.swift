@@ -1,3 +1,4 @@
+import Fluent
 import Foundation
 import Vapor
 
@@ -24,4 +25,23 @@ struct Pagination: Codable {
 	var next: URL?
 	/// If the current page is not the first page, this URL loads the previous page.
 	var previous: URL?
+}
+
+extension Pagination {
+	init(_ page: PageMetadata, urlFactory: (Pagination) -> URL) {
+		self.page = page.page
+		self.pageSize = page.per
+		self.pageCount = page.total
+
+		if self.page > 1 {
+			var previousPage = self
+			previousPage.page -= 1
+			previous = urlFactory(previousPage)
+		}
+		if self.page < pageCount {
+			var nextPage = self
+			nextPage.page += 1
+			next = urlFactory(nextPage)
+		}
+	}
 }

@@ -50,6 +50,26 @@ func routes(_ app: Application) throws {
 					roomID: try $0.parameters.require("room")
 				))
 			}
+
+			app.group("messages") { app in
+				app.get { req in
+					let roomID = try req.parameters.require("room", as: UUID.self)
+					return Content(try await roomController.messages(
+						req: req,
+						roomID: roomID,
+						page: (try? req.query.get(at: "page")) ?? 1,
+						urlFactory: { pagination in
+							URL(string: "/rooms/\(roomID)/messages?page=\(pagination.page)")!
+						}
+					))
+				}
+				app.post {
+					Content(try await roomController.postMessage(
+						req: $0,
+						roomID: try $0.parameters.require("room")
+					))
+				}
+			}
 		}
 	}
 

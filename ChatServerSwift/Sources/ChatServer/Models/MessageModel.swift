@@ -27,7 +27,7 @@ final class MessageModel: Model {
 		roomID: UUID,
 		content: String,
 		createdAt: Date? = nil
-	) throws {
+	) {
 		self.id = id
 		self.$sender.id = senderID
 		self.$room.id = roomID
