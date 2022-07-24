@@ -2,7 +2,6 @@ import { isLoggedIn, addAuthHeader } from "./auth.mjs"
 
 const root = document.querySelector(".chat-root")
 const roomList = document.querySelector(".rooms__list")
-const participantList = document.querySelector(".participants__list")
 const messageList = document.querySelector(".messages")
 const messageForm = document.querySelector(".message-field")
 
