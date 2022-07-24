@@ -17,13 +17,13 @@ class UserController {
 	func registerUser(req: Request) async throws -> UserDTO {
 		let dto = try req.content.decode(UserUpdateDTO.self)
 
-		guard let name = dto.name
+		guard let name = dto.name, !name.isEmpty
 		else { throw ValidationError.nameRequired }
 
-		guard let username = dto.username
+		guard let username = dto.username, !username.isEmpty
 		else { throw ValidationError.usernameRequired }
 
-		guard let password = dto.password
+		guard let password = dto.password, !password.isEmpty
 		else { throw ValidationError.passwordRequired }
 
 		let existingUser = try await UserModel.query(on: req.db)
