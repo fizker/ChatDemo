@@ -14,29 +14,29 @@ body {
 	grid-template-rows: 1fr 1fr max-content;
 }
 
-#rooms {
+.rooms {
 	grid-area: rooms;
 	background: green;
 }
 
-#rooms__btn {}
-#rooms__list {}
+.rooms__btn {}
+.rooms__list {}
 
-#participants {
+.participants {
 	grid-area: participants;
 	background: red;
 }
 
-#participants__btn {}
+.participants__btn {}
 
-#participants__list {}
+.participants__list {}
 
-#messages {
+.messages {
 	grid-area: messages;
 	background: orange;
 }
 
-#message-field {
+.message-field {
 	grid-area: message-field;
 	background: pink;
 }

@@ -1,3 +1,15 @@
+export class AuthError extends Error {
+}
+
+export function addAuthHeader(headers = {}) {
+	const credentials = sessionStorage.getItem("auth")
+	if(credentials == null) {
+		throw new AuthError()
+	}
+
+	return authHeader(JSON.parse(credentials), headers)
+}
+
 function authHeader({ username, password }, headers = {}) {
 	headers["Authorization"] = `Basic ${btoa(`${username}:${password}`)}`
 	return headers
