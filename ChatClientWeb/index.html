@@ -2,7 +2,49 @@
 
 <link href="/styles.css" rel="stylesheet">
 
-<div id="root">
+<h1 class="login-title">Login</h1>
+<h1 class="signup-title">Signup</h1>
+
+<nav class="unauth-nav">
+	<a href="/login" data-target="login">Log in</a>
+	<a href="/signup" data-target="signup">Sign up</a>
+</nav>
+
+<form class="login-root login-form">
+	<div class="error"></div>
+	<table>
+		<tr>
+			<td><label for="login-username">Username:</label></td>
+			<td><input id="login-username" type="text" name="username"></td>
+		</tr>
+		<tr>
+			<td><label for="login-password">Password:</label></td>
+			<td><input id="login-password" type="password" name="password"></td>
+		</tr>
+	</table>
+	<button>Login</button>
+</form>
+
+<form class="signup-root signup-form">
+	<div class="error"></div>
+	<table>
+		<tr>
+			<td><label for="signup-name">Name:</label></td>
+			<td><input id="signup-name" type="text" name="name"></td>
+		</tr>
+		<tr>
+			<td><label for="signup-username">Username:</label></td>
+			<td><input id="signup-username" type="text" name="username"></td>
+		</tr>
+		<tr>
+			<td><label for="signup-password">Password:</label></td>
+			<td><input id="signup-password" type="password" name="password"></td>
+		</tr>
+	</table>
+	<button>Sign up</button>
+</form>
+
+<div class="chat-root">
 	<nav id="rooms">
 		<button id="rooms__btn" onClick="addRoom()">New room</button>
 		<ul id="rooms__list">
@@ -22,3 +64,5 @@
 		</form>
 	</section>
 </div>
+
+<script type=module src="/js/index.mjs"></script>

@@ -24,9 +24,19 @@ func routes(_ app: Application) throws {
 	let app = app.grouped(UserAuthenticator())
 
 	app.get { req -> Response in
-		req.fileio.streamFile(at: "../ChatClientWeb/index.html")
+		return req.fileio.streamFile(at: "../ChatClientWeb/index.html")
 	}
-	app.get("styles.css") { req -> Response in
+	app.group("js") { app in
+		app.get(":file") { req -> Response in
+			let file = try req.parameters.require("file")
+			if !file.hasSuffix(".mjs") || file.hasPrefix(".") {
+				throw Abort(.notFound)
+			}
+
+			return req.fileio.streamFile(at: "../ChatClientWeb/js/\(file)")
+		}
+	}
+	app.get("styles.css") { req in
 		req.fileio.streamFile(at: "../ChatClientWeb/styles.css")
 	}
 

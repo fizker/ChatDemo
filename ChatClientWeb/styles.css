@@ -2,16 +2,16 @@ body {
 	margin: 0;
 	padding: 0;
 }
-#root {
+
+.chat-root {
 	display: grid;
+	height: 100vh;
 	grid-template-areas:
 		"rooms messages"
 		"participants messages"
 		"participants message-field";
 	grid-template-columns: max-content 1fr;
 	grid-template-rows: 1fr 1fr max-content;
-
-	height: 100vh;
 }
 
 #rooms {
@@ -39,4 +39,12 @@ body {
 #message-field {
 	grid-area: message-field;
 	background: pink;
+}
+
+.error {
+	color: red;
+}
+
+.hidden {
+	display: none;
 }
