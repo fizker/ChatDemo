@@ -79,8 +79,22 @@ function updateMessageList() {
 }
 
 function setup() {
-	messageForm.onsubmit = (event) => {
+	messageForm.onsubmit = async (event) => {
 		event.preventDefault()
+
+		const content = messageForm.content.value
+		messageForm.content.value = ""
+
+		const res = await fetch(`/rooms/${data.currentRoom.id}/messages`, {
+			method: "post",
+			body: JSON.stringify({ content }),
+			headers: addAuthHeader({ "content-type": "application/json" }),
+		})
+
+		const message = await res.json()
+		data.currentRoom.latestMessage = message
+		data.messages.items.push(message)
+		updateMessageList()
 	}
 }
 

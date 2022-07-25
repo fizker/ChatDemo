@@ -26,11 +26,6 @@ body {
 	background: orange;
 }
 
-.message-field {
-	grid-area: message-field;
-	background: pink;
-}
-
 .message {
 	display: grid;
 	grid-template-areas:
@@ -49,6 +44,17 @@ body {
 }
 .message__content {
 	grid-area: content;
+}
+
+.message-field {
+	grid-area: message-field;
+	display: flex;
+}
+
+.message-field input {
+	flex-grow: 1;
+}
+.message-field button {
 }
 
 .error {
