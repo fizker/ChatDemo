@@ -5,6 +5,9 @@ const roomList = document.querySelector(".rooms__list")
 const messageList = document.querySelector(".messages")
 const messageForm = document.querySelector(".message-field")
 
+const addRoomBtn = document.querySelector(".rooms__btn")
+const addRoomDialog = document.querySelector("#add-room-dialog")
+
 const data = {
 	rooms: null,
 	currentRoom: null,
@@ -79,6 +82,39 @@ function updateMessageList() {
 }
 
 function setup() {
+	addRoomBtn.addEventListener("click", (event) => {
+		event.preventDefault()
+
+		addRoomDialog.showModal()
+	})
+
+	addRoomDialog.querySelector("button[type=reset]").addEventListener("click", () => {
+		addRoomDialog.close()
+	})
+
+	addRoomDialog.addEventListener("close", async (event) => {
+		const addRoomForm = addRoomDialog.querySelector("form")
+
+		event.preventDefault()
+
+		const name = addRoomForm.name.value
+		addRoomForm.name.value = ""
+
+		if(addRoomDialog.returnValue != "add") {
+			return
+		}
+
+		const res = await fetch("/rooms", {
+			method: "post",
+			body: JSON.stringify({ name }),
+			headers: addAuthHeader({ "content-type": "application/json" }),
+		})
+
+		const room = await res.json()
+		data.rooms.items.push(room)
+		updateRoomList()
+	})
+
 	messageForm.onsubmit = async (event) => {
 		event.preventDefault()
 
