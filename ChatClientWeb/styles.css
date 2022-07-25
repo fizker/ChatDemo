@@ -31,6 +31,26 @@ body {
 	background: pink;
 }
 
+.message {
+	display: grid;
+	grid-template-areas:
+		"sender timestamp"
+		"content content";
+	grid-template-columns: max-content 1fr;
+	grid-template-rows: max-content max-content;
+	column-gap: 1rem;
+	margin: 1rem 1rem;
+}
+.message__sender {
+	grid-area: sender;
+}
+.message__timestamp {
+	grid-area: timestamp;
+}
+.message__content {
+	grid-area: content;
+}
+
 .error {
 	color: red;
 }

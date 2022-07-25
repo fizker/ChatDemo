@@ -16,6 +16,12 @@ export function setChatDisplay(shouldBeVisible) {
 
 	if(shouldBeVisible) {
 		loadRooms().then(updateRoomList)
+
+		const selectedRoom = sessionStorage.getItem("room")
+		if(selectedRoom) {
+			const room = JSON.parse(selectedRoom)
+			selectRoom(room)
+		}
 	}
 }
 
@@ -30,7 +36,7 @@ async function loadRooms() {
 }
 
 function updateRoomList() {
-	roomList.innerHTML = ''
+	roomList.innerHTML = ""
 	for(const room of data.rooms.items) {
 		const item = document.createElement("li")
 		const link = document.createElement("a")
@@ -46,18 +52,40 @@ function updateRoomList() {
 }
 
 async function selectRoom(room) {
+	sessionStorage.setItem("room", JSON.stringify(room))
+
 	const res = await fetch(`/rooms/${room.id}/messages`, {
 		headers: addAuthHeader(),
 	})
 
 	data.messages = await res.json()
 	data.currentRoom = room
+
+	updateMessageList()
+}
+
+function updateMessageList() {
+	messageList.innerHTML = ""
+	for(const message of data.messages.items) {
+		const item = document.createElement("div")
+		item.className = "message"
+		item.innerHTML = `
+			<div class="message__sender">${message.sender.name}</div>
+			<div class="message__timestamp">${formatDate(message.createdAt)}</div>
+			<div class="message__content">${message.content}</div>
+		`
+		messageList.appendChild(item)
+	}
 }
 
 function setup() {
 	messageForm.onsubmit = (event) => {
 		event.preventDefault()
 	}
+}
+
+function formatDate(date) {
+	return date.toString()
 }
 
 setup()
