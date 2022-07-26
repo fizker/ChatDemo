@@ -21,7 +21,7 @@ let package = Package(
 		.package(url: "https://github.com/vapor/fluent.git", from: "4.4.0"),
 		.package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from: "4.2.0"),
 		.package(url: "https://github.com/fizker/swift-server-sent-event-models.git", from: "0.0.1"),
-		.package(url: "https://github.com/fizker/swift-server-sent-event-vapor.git", from: "0.1.1"),
+		.package(url: "https://github.com/fizker/swift-server-sent-event-vapor.git", from: "0.1.2"),
 	],
 	targets: [
 		.executableTarget(
