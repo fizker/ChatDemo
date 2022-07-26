@@ -3,45 +3,12 @@ import ServerSentEventModels
 import ServerSentEventVapor
 import Vapor
 
-extension UserModel: Authenticatable {
-}
-
-struct AuthTokenInQueryAuthenticator: AsyncRequestAuthenticator {
-	func authenticate(request: Request) async throws {
-		if
-			let token = try? request.query.get(String.self, at: "token"),
-			let data = Data(base64Encoded: token),
-			let values = String(data: data, encoding: .utf8)
-		{
-			let a = values.components(separatedBy: ":")
-			let username = a[0]
-			let password = a[1...].joined(separator: ":")
-
-			let auth = UserAuthenticator()
-			try await auth.authenticate(basic: .init(username: username, password: password), for: request)
-		}
-	}
-}
-
-struct UserAuthenticator: AsyncBasicAuthenticator {
-	func authenticate(basic: BasicAuthorization, for request: Request) async throws {
-		guard
-			let user = try await UserModel.query(on: request.db)
-			.filter(\.$username == basic.username)
-			.first(),
-			try await request.password.async.verify(basic.password, created: user.passwordHash)
-		else { return }
-
-		request.auth.login(user)
-	}
-}
-
 func routes(_ app: Application) throws {
 	let eventController = ServerSentEventController()
 	let roomController = RoomController(eventController: eventController)
 	let userController = UserController()
 
-	let app = app.grouped(UserAuthenticator())
+	let app = app.grouped(UserBasicAuthenticator())
 
 	app.get { req -> Response in
 		return req.fileio.streamFile(at: "../ChatClientWeb/index.html")
@@ -62,8 +29,7 @@ func routes(_ app: Application) throws {
 
 	app.grouped(AuthTokenInQueryAuthenticator()).grouped(UserModel.guardMiddleware()).get("events") { req -> ServerSentEventResponse in
 		let user = try req.auth.require(UserModel.self)
-		let id = try user.requireID()
-		return eventController.createResponse(id: id)
+		return eventController.createResponse(id: try user.requireID())
 	}
 
 	app.grouped(UserModel.guardMiddleware()).group("rooms") { app in
@@ -118,21 +84,5 @@ func routes(_ app: Application) throws {
 		}
 
 		app.post("register") { try await Content(userController.registerUser(req: $0)) }
-	}
-}
-
-struct Content<T: Codable>: Codable, Vapor.Content {
-	var item: T
-
-	init(_ item: T) {
-		self.item = item
-	}
-
-	init(from decoder: Decoder) throws {
-		item = try T(from: decoder)
-	}
-
-	func encode(to encoder: Encoder) throws {
-		try item.encode(to: encoder)
 	}
 }
