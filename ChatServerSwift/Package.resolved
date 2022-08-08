@@ -218,6 +218,15 @@
         }
       },
       {
+        "package": "swift-server-sent-event-vapor",
+        "repositoryURL": "https://github.com/fizker/swift-server-sent-event-vapor.git",
+        "state": {
+          "branch": null,
+          "revision": "28366ff0391a4ee4ee329db667089290c7b965e0",
+          "version": "0.1.1"
+        }
+      },
+      {
         "package": "vapor",
         "repositoryURL": "https://github.com/vapor/vapor.git",
         "state": {

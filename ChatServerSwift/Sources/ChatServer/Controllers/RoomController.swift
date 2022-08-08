@@ -6,6 +6,7 @@ extension MessageModel {
 		MessageDTO(
 			id: try requireID(),
 			content: content,
+			roomID: $room.id,
 			sender: try await $sender.get(on: db).asDTO,
 			createdAt: createdAt!
 		)
@@ -25,6 +26,11 @@ extension RoomModel {
 
 class RoomController {
 	let messagePageSize = 50
+	let eventController: EventController
+
+	init(eventController: EventController) {
+		self.eventController = eventController
+	}
 
 	func room(req: Request, roomID: UUID) async throws -> RoomDTO {
 		guard let room = try await RoomModel.query(on: req.db)
@@ -53,7 +59,9 @@ class RoomController {
 		let participant = try RoomParticipantModel(room: room, participant: try req.auth.require(UserModel.self))
 		try await participant.save(on: req.db)
 
-		return try await room.asDTO(on: req.db)
+		let res = try await room.asDTO(on: req.db)
+		try eventController.emit(res)
+		return res
 	}
 
 	func joinRoom(req: Request, roomID: UUID) async throws -> RoomDTO {
@@ -74,7 +82,9 @@ class RoomController {
 		let message = MessageModel(senderID: try user.requireID(), roomID: roomID, content: dto.content)
 		try await message.save(on: req.db)
 
-		return try await message.asDTO(on: req.db)
+		let res = try await message.asDTO(on: req.db)
+		try eventController.emit(res)
+		return res
 	}
 
 	func messages(req: Request, roomID: UUID, page: Int, urlFactory: (Pagination) -> URL) async throws -> Page<MessageDTO> {

@@ -10,8 +10,21 @@ export function addAuthHeader(headers = {}) {
 	return authHeader(JSON.parse(credentials), headers)
 }
 
-function authHeader({ username, password }, headers = {}) {
-	headers["Authorization"] = `Basic ${btoa(`${username}:${password}`)}`
+export function getAuthToken() {
+	const credentials = sessionStorage.getItem("auth")
+	if(credentials == null) {
+		throw new AuthError()
+	}
+
+	return authToken(JSON.parse(credentials))
+}
+
+function authToken({ username, password }) {
+	return btoa(`${username}:${password}`)
+}
+
+function authHeader(credentials, headers = {}) {
+	headers["Authorization"] = `Basic ${authToken(credentials)}`
 	return headers
 }
 

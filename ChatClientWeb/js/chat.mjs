@@ -1,4 +1,4 @@
-import { isLoggedIn, addAuthHeader } from "./auth.mjs"
+import { isLoggedIn, addAuthHeader, getAuthToken } from "./auth.mjs"
 
 const root = document.querySelector(".chat-root")
 const roomList = document.querySelector(".rooms__list")
@@ -25,7 +25,35 @@ export function setChatDisplay(shouldBeVisible) {
 			const room = JSON.parse(selectedRoom)
 			selectRoom(room)
 		}
+
+		const eventSource = new EventSource("/events?token=" + getAuthToken())
+		eventSource.addEventListener("messageSent", (message) => {
+			const dto = JSON.parse(message.data)
+			addMessage(dto)
+		})
+		eventSource.addEventListener("roomCreated", (message) => {
+			const dto = JSON.parse(message.data)
+			addRoom(dto)
+		})
 	}
+}
+
+function addMessage(message) {
+	const room = data.rooms.items.find(x => x.id === message.roomID)
+	if(room.latestMessage == null || room.latestMessage.createdAt < message.createdAt) {
+		room.latestMessage = message
+	}
+
+	if(data.currentRoom?.id === room.id) {
+		data.currentRoom = room
+		data.messages.items.push(message)
+		updateMessageList()
+	}
+}
+
+function addRoom(room) {
+	data.rooms.items.push(room)
+	updateRoomList()
 }
 
 async function loadRooms() {
@@ -109,10 +137,6 @@ function setup() {
 			body: JSON.stringify({ name }),
 			headers: addAuthHeader({ "content-type": "application/json" }),
 		})
-
-		const room = await res.json()
-		data.rooms.items.push(room)
-		updateRoomList()
 	})
 
 	messageForm.onsubmit = async (event) => {
@@ -126,11 +150,6 @@ function setup() {
 			body: JSON.stringify({ content }),
 			headers: addAuthHeader({ "content-type": "application/json" }),
 		})
-
-		const message = await res.json()
-		data.currentRoom.latestMessage = message
-		data.messages.items.push(message)
-		updateMessageList()
 	}
 }
 

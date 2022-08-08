@@ -21,6 +21,7 @@ let package = Package(
 		.package(url: "https://github.com/vapor/fluent.git", from: "4.4.0"),
 		.package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from: "4.2.0"),
 		.package(url: "https://github.com/fizker/swift-server-sent-event-models.git", from: "0.0.1"),
+		.package(url: "https://github.com/fizker/swift-server-sent-event-vapor.git", from: "0.1.1"),
 	],
 	targets: [
 		.executableTarget(
@@ -30,6 +31,7 @@ let package = Package(
 				.product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver"),
 				.product(name: "Vapor", package: "vapor"),
 				.product(name: "ServerSentEventModels", package: "swift-server-sent-event-models"),
+				.product(name: "ServerSentEventVapor", package: "swift-server-sent-event-vapor"),
 			],
 			swiftSettings: [
 				// Enable better optimizations when building in Release configuration. Despite the use of
